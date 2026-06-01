@@ -1,5 +1,6 @@
 const tokenKey = "portfolio_auth_token";
-const apiBase = window.location.origin === "http://localhost:3000" ? "" : "http://localhost:3000";
+const isLocalFrontend = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
+const apiBase = isLocalFrontend && window.location.port !== "3000" ? "http://localhost:3000" : "";
 const siteBase = apiBase || "";
 
 const authMessage = document.querySelector("#authMessage");
@@ -22,13 +23,13 @@ const api = async (path, options = {}) => {
       }
     });
   } catch {
-    throw new Error("Cannot reach the backend server. Open http://localhost:3000/login.html and make sure the server is running.");
+    throw new Error("Cannot reach the backend server. If you are testing locally, open http://localhost:3000/login.html and make sure the server is running.");
   }
 
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    const error = new Error(data.error || `Request failed with status ${response.status}. Open http://localhost:3000/login.html if you are using Live Server.`);
+    const error = new Error(data.error || `Request failed with status ${response.status}.`);
     Object.assign(error, data);
     throw error;
   }

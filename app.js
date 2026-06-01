@@ -1,174 +1,110 @@
-const tokenKey = "portfolio_auth_token";
-const apiBase = window.location.origin === "http://localhost:3000" ? "" : "http://localhost:3000";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Shahroz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-body">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Back to Shahroz home">
+      <img src="assets/shahroz-photo.jpeg" alt="Shahroz portrait logo">
+      <span>Shahroz</span>
+    </a>
+    <nav class="nav-links" aria-label="Login navigation">
+      <a href="/">Website</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </header>
 
-const accountStatus = document.querySelector("#accountStatus");
-const contactForm = document.querySelector("#contactForm");
-const contactMessage = document.querySelector("#contactMessage");
-const signOutButton = document.querySelector("#signOutButton");
-const adminPanelButton = document.querySelector("#adminPanelButton");
-const resendVerificationButton = document.querySelector("#resendVerificationButton");
-const contactName = document.querySelector("#contactName");
-const contactEmail = document.querySelector("#contactEmail");
-const authLinks = document.querySelectorAll(".auth-link");
+  <main class="login-main">
+    <section class="login-panel">
+      <div class="login-copy">
+        <p class="eyebrow">Account access</p>
+        <h1>Sign in or create your account.</h1>
+        <p>
+          Login checks your account in the MySQL database. If your email is not
+          registered yet, create an account first.
+        </p>
+      </div>
 
-let currentUser = null;
+      <div class="auth-box login-box">
+        <div class="auth-tabs" role="tablist" aria-label="Authentication">
+          <button type="button" class="tab-button active" data-auth-tab="signin">Sign in</button>
+          <button type="button" class="tab-button" data-auth-tab="signup">Sign up</button>
+        </div>
 
-const api = async (path, options = {}) => {
-  const token = localStorage.getItem(tokenKey);
-  const headers = {
-    "Content-Type": "application/json",
-    ...(options.headers || {})
-  };
+        <form class="auth-pane active" id="signinPane">
+          <h2>Welcome back</h2>
+          <label>
+            Email
+            <input type="email" id="signinEmail" autocomplete="email" required>
+          </label>
+          <label>
+            Password
+            <input type="password" id="signinPassword" autocomplete="current-password" required>
+          </label>
+          <button class="solid-button" type="submit">Sign in</button>
+        </form>
 
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
+        <form class="auth-pane" id="signupPane">
+          <h2>Create account</h2>
+          <label>
+            Full name
+            <input type="text" id="signupName" autocomplete="name" required>
+          </label>
+          <label>
+            Email
+            <input type="email" id="signupEmail" autocomplete="email" required>
+          </label>
+          <label>
+            Mobile number
+            <input type="tel" id="signupPhone" autocomplete="tel" inputmode="tel" placeholder="+92 300 1234567" required>
+          </label>
+          <div class="form-row">
+            <label>
+              Gender
+              <select id="signupGender">
+                <option value="">Select gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </label>
+            <label>
+              City
+              <input type="text" id="signupCity" autocomplete="address-level2" placeholder="Your city">
+            </label>
+          </div>
+          <label>
+            Occupation / education
+            <input type="text" id="signupOccupation" autocomplete="organization-title" placeholder="Student, developer, etc.">
+          </label>
+          <label>
+            Password
+            <input type="password" id="signupPassword" autocomplete="new-password" minlength="8" required>
+          </label>
+          <button class="solid-button" type="submit">Sign up</button>
+        </form>
 
-  let response;
+        <p class="form-message" id="authMessage" role="status"></p>
+        <form class="verification-code-form hidden" id="verificationCodeForm">
+          <label>
+            Verification code
+            <input type="text" id="verificationCode" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code">
+          </label>
+          <button class="solid-button" type="submit">Verify code</button>
+        </form>
+        <button class="ghost-button hidden" type="button" id="resendPendingVerification">Resend verification email</button>
+      </div>
+    </section>
+  </main>
 
-  try {
-    response = await fetch(`${apiBase}${path}`, {
-      ...options,
-      headers
-    });
-  } catch {
-    throw new Error("Cannot reach the backend server. Open http://localhost:3000 and make sure the server is running.");
-  }
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.error || `Request failed with status ${response.status}. Open http://localhost:3000 if you are using Live Server.`);
-  }
-
-  return data;
-};
-
-const setMessage = (element, message, type = "") => {
-  element.textContent = message;
-  element.className = `form-message ${type}`.trim();
-};
-
-const renderAccount = () => {
-  const isSignedIn = Boolean(currentUser);
-  const isVerified = Boolean(currentUser?.emailVerified);
-  const submitButton = contactForm.querySelector("button[type='submit']");
-
-  authLinks.forEach((link) => {
-    link.classList.toggle("hidden", isSignedIn);
-  });
-
-  adminPanelButton.classList.toggle("hidden", !currentUser?.isAdmin);
-  signOutButton.classList.toggle("hidden", !isSignedIn);
-  resendVerificationButton.classList.toggle("hidden", !isSignedIn || isVerified);
-  submitButton.disabled = !isSignedIn || !isVerified;
-
-  contactName.readOnly = true;
-  contactEmail.readOnly = true;
-
-  if (!isSignedIn) {
-    accountStatus.textContent = "You are not signed in.";
-    contactName.value = "";
-    contactEmail.value = "";
-    contactName.placeholder = "Sign in to load your name";
-    contactEmail.placeholder = "Sign in to load your email";
-    return;
-  }
-
-  contactName.value = currentUser.name || "";
-  contactEmail.value = currentUser.email || "";
-
-  if (isVerified) {
-    accountStatus.textContent = `Signed in as ${currentUser.name}. Your email is verified.`;
-  } else {
-    accountStatus.textContent = `Signed in as ${currentUser.name}. Please verify your email before sending a message.`;
-  }
-};
-
-const loadCurrentUser = async () => {
-  if (!localStorage.getItem(tokenKey)) {
-    renderAccount();
-    return;
-  }
-
-  try {
-    const data = await api("/api/auth/me");
-    currentUser = data.user;
-  } catch {
-    localStorage.removeItem(tokenKey);
-    currentUser = null;
-  }
-
-  renderAccount();
-};
-
-signOutButton.addEventListener("click", () => {
-  localStorage.removeItem(tokenKey);
-  currentUser = null;
-  contactForm.reset();
-  setMessage(contactMessage, "");
-  renderAccount();
-});
-
-resendVerificationButton.addEventListener("click", async () => {
-  try {
-    const data = await api("/api/auth/resend-verification", { method: "POST" });
-    setMessage(contactMessage, data.verificationLink ? `${data.message} Dev link: ${data.verificationLink}` : data.message, "success");
-  } catch (error) {
-    setMessage(contactMessage, error.message, "error");
-  }
-});
-
-contactForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  if (!currentUser) {
-    setMessage(contactMessage, "Please sign in before sending a message.", "error");
-    window.location.href = "/login.html?mode=signin";
-    return;
-  }
-
-  if (!currentUser.emailVerified) {
-    setMessage(contactMessage, "Please verify your email before sending a message.", "error");
-    return;
-  }
-
-  const formData = new FormData(contactForm);
-  const payload = Object.fromEntries(formData.entries());
-
-  try {
-    const data = await api("/api/contact", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-    contactForm.reset();
-    if (currentUser) {
-      contactName.value = currentUser.name;
-      contactEmail.value = currentUser.email;
-    }
-    setMessage(contactMessage, data.message, "success");
-  } catch (error) {
-    setMessage(contactMessage, error.message, "error");
-  }
-});
-
-const handleVerificationFromUrl = async () => {
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
-
-  if (!token) {
-    return;
-  }
-
-  try {
-    const data = await api(`/api/auth/verify-email?token=${encodeURIComponent(token)}`);
-    setMessage(contactMessage, data.message, "success");
-    window.history.replaceState({}, document.title, window.location.pathname + "#contact");
-    await loadCurrentUser();
-  } catch (error) {
-    setMessage(contactMessage, error.message, "error");
-  }
-};
-
-loadCurrentUser().then(handleVerificationFromUrl);
+  <script src="login.js" defer></script>
+</body>
+</html>

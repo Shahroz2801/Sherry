@@ -1,7 +1,6 @@
 const tokenKey = "portfolio_auth_token";
 const isLocalFrontend = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
 const apiBase = isLocalFrontend && window.location.port !== "3000" ? "http://localhost:3000" : "";
-const siteBase = apiBase || "";
 
 const authMessage = document.querySelector("#authMessage");
 const signinPane = document.querySelector("#signinPane");
@@ -80,7 +79,7 @@ const finishAuth = (data, message) => {
   localStorage.setItem(tokenKey, data.token);
 
   if (data.user?.isAdmin) {
-    window.location.href = `${siteBase}/admin.html`;
+       window.location.href = "/admin.html";
     return;
   }
 
@@ -89,7 +88,7 @@ const finishAuth = (data, message) => {
   }
 
   window.setTimeout(() => {
-    window.location.href = `${siteBase}/#contact`;
+    window.location.href = "/#contact";
   }, message ? 1200 : 0);
 };
 

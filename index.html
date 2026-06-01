@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shahroz | Personal Website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Shahroz home">
+      <img src="assets/shahroz-photo.jpeg" alt="Shahroz portrait logo">
+      <span>Shahroz</span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a class="ghost-button hidden" href="/admin.html" id="adminPanelButton">Admin panel</a>
+      <a class="ghost-button auth-link" href="/login.html?mode=signin">Sign in</a>
+      <a class="solid-button auth-link" href="/login.html?mode=signup">Sign up</a>
+      <button class="ghost-button hidden" type="button" id="signOutButton">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home" aria-label="Intro">
+      <img class="hero-image" src="assets/hero-workspace.png" alt="Modern developer workspace with laptop and notebook">
+      <div class="hero-overlay"></div>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <p class="eyebrow">Personal portfolio</p>
+          <h1>Shahroz</h1>
+          <p class="hero-copy">
+            I am building clean, useful web experiences with a focus on practical design,
+            database-backed systems, and dependable user workflows.
+          </p>
+          <div class="hero-actions">
+            <a class="solid-button" href="#contact">Contact me</a>
+            <a class="outline-button" href="#projects">View work</a>
+          </div>
+        </div>
+
+        <div class="hero-portrait" aria-label="Portrait of Shahroz">
+          <img src="assets/shahroz-photo.jpeg" alt="Shahroz standing in warm light">
+          <div>
+            <strong>Shahroz</strong>
+            <span>Full-stack learner and web developer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="about-intro">
+        <div class="section-heading">
+          <p class="eyebrow">About me</p>
+          <h2>Focused on learning, building, and improving.</h2>
+          <p class="section-note">
+            I am Shahroz, a software development student building practical web projects with
+            clean interfaces, server APIs, secure login, and connected databases.
+          </p>
+        </div>
+      </div>
+      <div class="about-grid">
+        <article>
+          <h3>Profile</h3>
+          <p>
+            My name is Shahroz. This website is a central place for my personal
+            information, skills, projects, and secure contact messages from verified users.
+          </p>
+        </article>
+        <article>
+          <h3>Education</h3>
+          <p>
+            I am studying software development concepts and practicing full-stack web
+            development with frontend pages, APIs, authentication, and databases.
+          </p>
+        </article>
+        <article>
+          <h3>Goal</h3>
+          <p>
+            I want to create useful software that is simple to use, secure by design,
+            and clear enough for people to trust.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section muted" id="skills">
+      <div class="section-heading">
+        <p class="eyebrow">Skills</p>
+        <h2>Tools and areas I am working with.</h2>
+      </div>
+      <div class="skill-list">
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>JavaScript</span>
+        <span>Node.js</span>
+        <span>Express</span>
+        <span>MySQL</span>
+        <span>Authentication</span>
+        <span>Responsive UI</span>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-heading">
+        <p class="eyebrow">Projects</p>
+        <h2>Selected work and practice areas.</h2>
+      </div>
+      <div class="project-grid">
+        <article>
+          <h3>Secure Contact System</h3>
+          <p>Registration, sign in, email verification, and verified-user-only messages.</p>
+        </article>
+        <article>
+          <h3>Portfolio Website</h3>
+          <p>A responsive personal site with clean sections for profile, skills, and projects.</p>
+        </article>
+        <article>
+          <h3>Database API</h3>
+          <p>MySQL-backed API routes for users, verification tokens, and contact storage.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="section-heading">
+        <p class="eyebrow">Contact</p>
+        <h2>Send me a message.</h2>
+        <p class="section-note">
+          Only signed-in users with verified email addresses can submit this form.
+        </p>
+      </div>
+
+      <div class="contact-layout">
+        <aside class="contact-panel">
+          <h3>Account status</h3>
+          <p id="accountStatus">You are not signed in.</p>
+          <a class="solid-button auth-link" href="/login.html?mode=signup">Create account</a>
+          <a class="outline-button auth-link dark-outline" href="/login.html?mode=signin">I already have an account</a>
+          <button class="ghost-button hidden" type="button" id="resendVerificationButton">Resend verification email</button>
+        </aside>
+
+        <form class="contact-form" id="contactForm">
+          <label>
+            Name
+            <input type="text" name="name" id="contactName" autocomplete="name" readonly placeholder="Sign in to load your name" required>
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" id="contactEmail" autocomplete="email" readonly placeholder="Sign in to load your email" required>
+          </label>
+          <label>
+            Subject
+            <input type="text" name="subject" maxlength="120" required>
+          </label>
+          <label>
+            Message
+            <textarea name="message" rows="6" maxlength="2000" required></textarea>
+          </label>
+          <button class="solid-button" type="submit">Send message</button>
+          <p class="form-message" id="contactMessage" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

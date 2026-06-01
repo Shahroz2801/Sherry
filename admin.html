@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Shahroz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Back to Shahroz home">
+      <img src="assets/shahroz-photo.jpeg" alt="Shahroz portrait logo">
+      <span>Shahroz</span>
+    </a>
+    <nav class="nav-links" aria-label="Admin navigation">
+      <a href="/">Website</a>
+      <a href="#users">Users</a>
+      <a href="#messages">Messages</a>
+    </nav>
+    <div class="header-actions">
+      <button class="ghost-button" type="button" id="adminSignOutButton">Sign out</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <section class="admin-hero">
+      <p class="eyebrow">Admin panel</p>
+      <h1>Dashboard</h1>
+      <p id="adminStatus">Checking admin access...</p>
+    </section>
+
+    <section class="admin-stats" aria-label="Admin statistics">
+      <article>
+        <span id="totalUsers">0</span>
+        <p>Total users</p>
+      </article>
+      <article>
+        <span id="loggedInUsers">0</span>
+        <p>Users logged in</p>
+      </article>
+      <article>
+        <span id="verifiedUsers">0</span>
+        <p>Verified emails</p>
+      </article>
+      <article>
+        <span id="totalMessages">0</span>
+        <p>Messages</p>
+      </article>
+    </section>
+
+    <section class="admin-section" id="users">
+      <div class="section-heading">
+        <p class="eyebrow">People</p>
+        <h2>Registered and signed-in users</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Details</th>
+              <th>Verified</th>
+              <th>Last login</th>
+              <th>Messages</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable">
+            <tr><td colspan="7">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="admin-section" id="messages">
+      <div class="section-heading">
+        <p class="eyebrow">Contact me</p>
+        <h2>Messages from verified users</h2>
+      </div>
+      <div class="message-list" id="messageList">
+        <article class="empty-state">Loading messages...</article>
+      </div>
+    </section>
+  </main>
+
+  <script src="admin.js" defer></script>
+</body>
+</html>
